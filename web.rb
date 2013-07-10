@@ -91,7 +91,7 @@ post '/lingr/' do
   json = JSON.parse(request.body.string)
   json["events"].map {|e| e['message'] }.compact.map {|message|
     text = message['text']
-    if text == '#momochan'
+    if /#momochan$/ =~ text
       momochan
     else
       Momochan.create({:text => text}).update
