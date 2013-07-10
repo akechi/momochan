@@ -3,7 +3,7 @@ require 'bundler'
 require 'digest/sha1'
 require 'json'
 require 'igo-ruby'
- 
+
 Dir.chdir File.dirname(__FILE__)
 Bundler.require
 set :environment, :production
@@ -30,7 +30,7 @@ class Splitter
     array
   end
 end
- 
+
 class Markov
   def initialize()
     @table = Array.new
