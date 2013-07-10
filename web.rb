@@ -1,3 +1,4 @@
+# coding: utf-8
 require 'bundler'
 require 'digest/sha1'
 require 'json'
