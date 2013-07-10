@@ -9,10 +9,10 @@ set :environment, :production
 
 DataMapper::setup(:default, "sqlite3://#{Dir.pwd}/momochan.db")
 class Momochan
-    include DataMapper::Resource
-    property :id, Serial
-    property :text, String, :length => 4096
-    property :created_at, DateTime
+  include DataMapper::Resource
+  property :id, Serial
+  property :text, String, :length => 4096
+  property :created_at, DateTime
 end
 DataMapper.finalize
 Momochan.auto_upgrade!
