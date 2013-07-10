@@ -53,7 +53,7 @@ class Markov
     key1 = '__BEGIN__'
     key2 = search1(key1)
     return [] unless key2
-    while key2 != '__END__'
+    until key2 == '__END__'
       array << key2
       key1, key2 = key2, search2(key1, key2)
     end
