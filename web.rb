@@ -50,7 +50,8 @@ class Markov
   end
   def build
     array = []
-    key1, key2 = '__BEGIN__', search1(key1)
+    key1 = '__BEGIN__'
+    key2 = search1(key1)
     return [] unless key2
     until key2 == '__END__'
       array << key2
