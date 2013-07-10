@@ -22,11 +22,7 @@ class Splitter
     @tagger = Igo::Tagger.new('ipadic')
   end
   def split(str)
-    array = []
-    array << '__BEGIN__'
-    array += @tagger.wakati(str)
-    array << '__END__'
-    array
+    ['__BEGIN__', *@tagger.wakati(str), '__END__']
   end
 end
 
