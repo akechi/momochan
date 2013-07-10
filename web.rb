@@ -33,7 +33,7 @@ class Markov
   end
   def study(words)
     return if words.size < 3
-    for i in 0..(words.size - 3) do
+    (0..(words.size - 3)).each do |i|
       @table << [words[i], words[i + 1], words[i + 2]]
     end
   end
