@@ -32,7 +32,6 @@ class Markov
     @table = []
   end
   def study(words)
-    return if words.size < 3
     words.each_cons(3) do |a, b, c|
       @table << [a, b, c]
     end
