@@ -73,7 +73,7 @@ def momochan
   result = ''
   11.times do
     result = $markov.build.join('')
-    break if result.size < 140
+    break if result.size < 140 && result !~ /^https?:\/\/\S+$/
   end
   result.gsub(/[“”「」『』【】]/, '')
 end
