@@ -94,3 +94,8 @@ end
 get '/' do
   momochan
 end
+
+t = Time.now
+get '/dev' do
+  {size: Momochan.all.size, start_time: t}
+end
