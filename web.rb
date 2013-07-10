@@ -33,8 +33,8 @@ class Markov
   end
   def study(words)
     return if words.size < 3
-    (0..(words.size - 3)).each do |i|
-      @table << [words[i], words[i + 1], words[i + 2]]
+    words.each_cons(3) do |a, b, c|
+      @table << [a, b, c]
     end
   end
   def search1(key)
