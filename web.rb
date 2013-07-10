@@ -60,7 +60,7 @@ class Markov
     key1 = '__BEGIN__'
     key2 = search1(key1)
     return [] unless key2
-    while key2 != '__END__' do
+    while key2 != '__END__'
       array << key2
       key3 = search2(key1, key2)
       key1 = key2
@@ -80,7 +80,7 @@ end
 
 def momochan
   counter = 0
-  while counter <= 10 do
+  while counter <= 10
     result = $markov.build.join('')
     break if result.size < 140
     counter += 1
