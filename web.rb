@@ -70,11 +70,9 @@ Momochan.all.each do |m|
 end
 
 def momochan
-  counter = 0
-  while counter <= 10
+  11.times do
     result = $markov.build.join('')
     break if result.size < 140
-    counter += 1
   end
   result.gsub(/[“”「」『』【】]/, '')
 end
