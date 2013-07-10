@@ -22,7 +22,7 @@ class Splitter
     @tagger = Igo::Tagger.new('ipadic')
   end
   def split(str)
-    array = Array.new
+    array = []
     array << '__BEGIN__'
     array += @tagger.wakati(str)
     array << '__END__'
@@ -32,7 +32,7 @@ end
 
 class Markov
   def initialize()
-    @table = Array.new
+    @table = []
   end
   def study(words)
     return if words.size < 3
@@ -41,21 +41,21 @@ class Markov
     end
   end
   def search1(key)
-    array = Array.new
+    array = []
     @table.each {|row|
       array << row[1] if row[0] == key
     }
     array.sample
   end
   def search2(key1, key2)
-    array = Array.new
+    array = []
     @table.each {|row|
       array << row[2] if row[0] == key1 && row[1] == key2
     }
     array.sample
   end
   def build
-    array = Array.new
+    array = []
     key1 = '__BEGIN__'
     key2 = search1(key1)
     return [] unless key2
