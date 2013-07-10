@@ -70,6 +70,7 @@ Momochan.all.each do |m|
 end
 
 def momochan
+  result = ''
   11.times do
     result = $markov.build.join('')
     break if result.size < 140
