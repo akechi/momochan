@@ -29,23 +29,23 @@ end
 
 class Markov
   def initialize()
-    @table = []
+    @table = {}
   end
   def study(words)
     words.each_cons(3) do |a, b, c|
-      @table << [a, b, c]
+      @table[a] ||= []
+      @table[a] << [b, c]
     end
   end
   def search1(key)
-    @table.
-      select {|a, b, c| a == key }.
-      map {|a, b, c| b }.
+    @table[key].
+      map {|b, c| b }.
       sample
   end
   def search2(key1, key2)
-    @table.
-      select {|a, b, c| a == key1 && b == key2 }.
-      map {|a, b, c| c }.
+    @table[key1].
+      select {|b, c| b == key2 }.
+      map {|b, c| c }.
       sample
   end
   def build
