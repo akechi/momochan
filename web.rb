@@ -39,13 +39,13 @@ class Markov
   end
   def search1(key)
     @table[key].
-      map {|b, c| b }.
+      map {|(b, c)| b }.
       sample
   end
   def search2(key1, key2)
     @table[key1].
-      select {|b, c| b == key2 }.
-      map {|b, c| c }.
+      select {|(b, c)| b == key2 }.
+      map {|(b, c)| c }.
       sample
   end
   def build
