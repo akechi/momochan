@@ -37,18 +37,16 @@ class Markov
     end
   end
   def search1(key)
-    array = []
-    @table.each {|row|
-      array << row[1] if row[0] == key
-    }
-    array.sample
+    @table.
+      select {|row| row[0] == key }.
+      map {|row| row[1] }.
+      sample
   end
   def search2(key1, key2)
-    array = []
-    @table.each {|row|
-      array << row[2] if row[0] == key1 && row[1] == key2
-    }
-    array.sample
+    @table.
+      select {|row|  row[0] == key1 && row[1] == key2 }.
+      map {|row| row[2] }.
+      sample
   end
   def build
     array = []
