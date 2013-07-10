@@ -76,7 +76,7 @@ def momochan
     break if result.size < 140
     counter += 1
   end
-  result
+  result.gsub(/[“”「」『』【】]/, '')
 end
 
 post '/lingr/' do
