@@ -61,8 +61,8 @@ class Markov
   end
 end
 
-def momochan(markov, *args)
-  token =  args && args[0].size > 0 ? $splitter.split(args[0]) : nil
+def momochan(markov, text)
+  token =  text.size > 0 ? $splitter.split(text) : nil
   markov.study(token) if token
   result = ''
   21.times do
@@ -118,7 +118,7 @@ post '/lingr/' do
 end
 
 get '/' do
-  momochan($markov)
+  momochan($markov, '')
 end
 
 get '/dev' do
