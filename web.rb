@@ -18,11 +18,11 @@ end
 DataMapper.finalize
 Momochan.auto_upgrade!
 
-class Splitter
-  def initialize()
-    @tagger = Igo::Tagger.new('ipadic')
-  end
-  def split(str)
+module Splitter
+  @tagger = Igo::Tagger.new('ipadic')
+
+  module_function
+  def call(str)
     ['__BEGIN__', *@tagger.wakati(str), '__END__']
   end
 end
@@ -64,7 +64,7 @@ end
 module App
   module_function
   def momochan(text)
-    tokens = @splitter.split(text)
+    tokens = Splitter.(text)
     @markov.study(tokens)
     text = 21.times.inject('') {|_, _|
       result = @markov.build.join('')
@@ -93,16 +93,14 @@ module App
   @ready_p = false
 
   @markov = Markov.new
-  @splitter = Splitter.new
   class << self
     attr_reader :markov
-    attr_reader :splitter
   end
 
   Thread.start do
     Momochan.all.each do |m|
       #puts m['text']
-      @markov.study(@splitter.split(m['text']))
+      @markov.study(Splitter.(m['text']))
     end
     @ready_p = true
     @t1 = Time.now
@@ -124,7 +122,7 @@ post '/lingr/' do
     reply = [mcs + mgs].join("\n")
     if reply.empty?
       Momochan.create({:text => text}).update
-      App.markov.study(App.splitter.split(text))
+      App.markov.study(Splitter.(text))
       ""
     else
       reply
