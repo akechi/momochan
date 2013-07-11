@@ -100,8 +100,9 @@ post '/lingr/' do
   json["events"].map {|e| e['message'] }.compact.map {|message|
     text = message['text']
     next momochan_info(t0, t1, ready_p) if /^#momochan info$/ =~ text
-    mcs = text.scan(/#m[aiueo]*m[aiueo]*ch?[aiueo]*n|#amachan/).map {|_|
-      momochan($markov, text.gsub(/#(momo|ama)chan/, ''))
+    regexp = /#m[aiueo]*m[aiueo]*ch?[aiueo]*n|#amachan/
+    mcs = text.scan(regexp).map {|_|
+      momochan($markov, text.gsub(regexp, ''))
     }
     mgs = text.scan(/#momonga/).map {|_|
       [*["はい"]*10, "うるさい"].sample
