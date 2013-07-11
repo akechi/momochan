@@ -70,6 +70,10 @@ def momochan(markov)
   result.gsub(/[“”「」『』【】]/, '')
 end
 
+def momochan_info(t0, t1, ready_p)
+  {size: Momochan.all.size, started_at: t0, boot_time: t1 - t0, ready_p: ready_p}.to_json
+end
+
 t0 = Time.now
 t1 = Time.now
 ready_p = false
@@ -90,6 +94,7 @@ post '/lingr/' do
   json = JSON.parse(request.body.string)
   json["events"].map {|e| e['message'] }.compact.map {|message|
     text = message['text']
+    next momochan_info(t0, t1, ready_p) if /^#momochan info$/ =~ text
     mcs = text.scan(/#(momo|ama)chan/).map {|_|
       momochan($markov)
     }
@@ -112,5 +117,5 @@ get '/' do
 end
 
 get '/dev' do
-  {size: Momochan.all.size, started_at: t0, boot_time: t1 - t0, ready_p: ready_p}.to_json
+  momochan_info(t0, t1, ready_p)
 end
