@@ -63,11 +63,11 @@ end
 
 module App
   module_function
-  def momochan(markov, text)
+  def momochan(text)
     tokens = @splitter.split(text)
-    markov.study(tokens)
+    @markov.study(tokens)
     text = 21.times.inject('') {|_, _|
-      result = markov.build.join('')
+      result = @markov.build.join('')
       if tokens[1...-1].select {|x| x.size >= 2 && result[x] }.empty?
         result
       elsif result.size < 140 && /^https?:\/\/\S+$/ !~ result
@@ -116,7 +116,7 @@ post '/lingr/' do
     next App.momochan_info if /^#momochan info$/ =~ text
     regexp = /#m[aiueo]*m[aiueo]*ch?[aiueo]*n|#amachan/
     mcs = text.scan(regexp).map {|_|
-      App.momochan(App.markov, text.gsub(regexp, ''))
+      App.momochan(text.gsub(regexp, ''))
     }
     mgs = text.scan(/#momonga/).map {|_|
       [*["はい"]*10, "うるさい"].sample
@@ -133,7 +133,7 @@ post '/lingr/' do
 end
 
 get '/' do
-  App.momochan(App.markov, '')
+  App.momochan('')
 end
 
 get '/dev' do
