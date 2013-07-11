@@ -89,7 +89,7 @@ module App
   end
 
   @t0 = Time.now
-  @t1 = t0
+  @t1 = @t0
   @ready_p = false
 
   $markov = Markov.new
