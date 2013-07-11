@@ -61,6 +61,8 @@ class Markov
   end
 end
 
+t0 = Time.now
+
 $markov = Markov.new
 $splitter = Splitter.new
 
@@ -99,7 +101,7 @@ get '/' do
   momochan
 end
 
-t = Time.now
+t1 = Time.now
 get '/dev' do
-  {size: Momochan.all.size, start_time: t}.to_json
+  {size: Momochan.all.size, started_at: t0, boot_time: t1 - t0}.to_json
 end
