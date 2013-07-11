@@ -62,13 +62,19 @@ class Markov
 end
 
 t0 = Time.now
+t1 = Time.now
+ready_p = false
 
 $markov = Markov.new
 $splitter = Splitter.new
 
-Momochan.all.each do |m|
-  puts m['text']
-  $markov.study($splitter.split(m['text']))
+Thread.start do
+  Momochan.all.each do |m|
+    puts m['text']
+    $markov.study($splitter.split(m['text']))
+  end
+  ready_p = true
+  t1 = Time.now
 end
 
 def momochan
@@ -105,7 +111,6 @@ get '/' do
   momochan
 end
 
-t1 = Time.now
 get '/dev' do
-  {size: Momochan.all.size, started_at: t0, boot_time: t1 - t0}.to_json
+  {size: Momochan.all.size, started_at: t0, boot_time: t1 - t0, ready_p: ready_p}.to_json
 end
