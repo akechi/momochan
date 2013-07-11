@@ -65,7 +65,6 @@ def momochan(markov, text)
   tokens = $splitter.split(text)
   markov.study(tokens)
   result = 21.times.inject('') {|_, _|
-    momochan_construct(markov, tokens[1...-1], 21, '')
     result = markov.build.join('')
     if words.select {|x| x.size >= 2 && result[x] }.empty?
       result
