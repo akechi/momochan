@@ -65,7 +65,7 @@ def momochan(markov, text)
   tokens = $splitter.split(text)
   markov.study(tokens)
   result = momochan_construct(markov, tokens[1...-1], 21, '')
-  result.gsub(/[“”「」『』【】]/, '')
+  result.gsub(/[“”「」『』【】"]/, '')
 end
 
 def momochan_construct(markov, words, retry_countdown, previous)
