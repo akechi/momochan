@@ -64,15 +64,20 @@ end
 def momochan(markov, text)
   tokens = $splitter.split(text)
   markov.study(tokens)
-  result = 21.times do
-    result = markov.build.join('')
-    if tokens[1...-1].select {|x| x.size >= 2 && result[x] }.empty?
-      next result
-    elsif result.size < 140 && /^https?:\/\/\S+$/ !~ result
-      break result
-    end
-  end
+  result = momochan_construct(tokens, 21, '')
   result.gsub(/[“”「」『』【】]/, '')
+end
+
+def momochan_construct(tokens, retry_countdown, previous)
+  return previous if retry_countdown <= 0
+  result = markov.build.join('')
+  if tokens[1...-1].select {|x| x.size >= 2 && result[x] }.empty?
+    momochan_construct(tokens, retry_countdown - 1, result)
+  elsif result.size < 140 && /^https?:\/\/\S+$/ !~ result
+    result
+  else
+    momochan_construct(tokens, retry_countdown - 1, result)
+  end
 end
 
 def momochan_info(t0, t1, ready_p)
