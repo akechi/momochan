@@ -62,13 +62,12 @@ class Markov
 end
 
 def momochan(markov, text)
-  markov.study($splitter.split(text))
+  tokens = $splitter.split(text)
+  markov.study(tokens)
   result = ''
   21.times do
     result = markov.build.join('')
-    if token
-      next if token[1...-1].select {|x| x.size >= 2 && result[x] }.size == 0
-    end
+    next if tokens[1...-1].select {|x| x.size >= 2 && result[x] }.size == 0
     break if result.size < 140 && result !~ /^https?:\/\/\S+$/
   end
   result.gsub(/[“”「」『』【】]/, '')
