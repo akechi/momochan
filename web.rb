@@ -64,13 +64,12 @@ end
 def momochan(markov, text)
   tokens = $splitter.split(text)
   markov.study(tokens)
-  result = ''
-  21.times do
+  result = 21.times do
     result = markov.build.join('')
     if tokens[1...-1].select {|x| x.size >= 2 && result[x] }.empty?
-      next
+      next result
     elsif result.size < 140 && /^https?:\/\/\S+$/ !~ result
-      break
+      break result
     end
   end
   result.gsub(/[“”「」『』【】]/, '')
