@@ -1,4 +1,3 @@
-$_t0 = Time.now
 # coding: utf-8
 require 'bundler'
 require 'digest/sha1'
@@ -85,8 +84,7 @@ module App
       size: Momochan.all.size,
       started_at: @t0,
       boot_time: @t1 - @t0,
-      ready_p: @ready_p,
-      temporary: $_t1 - $_t0
+      ready_p: @ready_p
     }.to_json
   end
 
@@ -137,4 +135,3 @@ end
 get '/dev' do
   App.momochan_info
 end
-$_t1 = Time.now
