@@ -95,10 +95,11 @@ module App
   @ready_p = false
 
   @markov = Markov.new
-  attr_reader :markov
-
   @splitter = Splitter.new
-  attr_reader :splitter
+  class << self
+    attr_reader :markov
+    attr_reader :splitter
+  end
 
   Thread.start do
     Momochan.all.each do |m|
