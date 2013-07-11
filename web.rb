@@ -77,6 +77,8 @@ module App
       end
     }
     text.gsub(/[“”「」『』【】"]/, '')
+  rescue => e
+    e.inspect
   end
 
   def momochan_info
