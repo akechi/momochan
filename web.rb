@@ -64,7 +64,7 @@ end
 module App
   module_function
   def momochan(markov, text)
-    tokens = $splitter.split(text)
+    tokens = @splitter.split(text)
     markov.study(tokens)
     result = 21.times.inject('') {|_, _|
       result = markov.build.join('')
@@ -92,13 +92,16 @@ module App
   @t1 = @t0
   @ready_p = false
 
-  $markov = Markov.new
-  $splitter = Splitter.new
+  @markov = Markov.new
+  attr_reader :markov
+
+  @splitter = Splitter.new
+  attr_reader :splitter
 
   Thread.start do
     Momochan.all.each do |m|
       #puts m['text']
-      $markov.study($splitter.split(m['text']))
+      @markov.study(@splitter.split(m['text']))
     end
     @ready_p = true
     @t1 = Time.now
@@ -112,7 +115,7 @@ post '/lingr/' do
     next App.momochan_info if /^#momochan info$/ =~ text
     regexp = /#m[aiueo]*m[aiueo]*ch?[aiueo]*n|#amachan/
     mcs = text.scan(regexp).map {|_|
-      App.momochan($markov, text.gsub(regexp, ''))
+      App.momochan(App.markov, text.gsub(regexp, ''))
     }
     mgs = text.scan(/#momonga/).map {|_|
       [*["はい"]*10, "うるさい"].sample
@@ -120,7 +123,7 @@ post '/lingr/' do
     reply = [mcs + mgs].join("\n")
     if reply.empty?
       Momochan.create({:text => text}).update
-      $markov.study($splitter.split(text))
+      App.markov.study(App.splitter.split(text))
       ""
     else
       reply
@@ -129,7 +132,7 @@ post '/lingr/' do
 end
 
 get '/' do
-  App.momochan($markov, '')
+  App.momochan(App.markov, '')
 end
 
 get '/dev' do
