@@ -80,12 +80,19 @@ module App
   end
 
   def momochan_info
+    t0 = Time.now
+    size =
+      begin
+        Momochan.size
+      rescue => e
+        e
+      end
+    t1 = Time.now
     {
-      size: Momochan.all.size,
+      size: [size, t1 - t0],
       started_at: @t0,
       boot_time: @t1 - @t0,
-      ready_p: @ready_p,
-      x: (Momochan.methods.sort - methods).inspect
+      ready_p: @ready_p
     }.to_json
   end
 
