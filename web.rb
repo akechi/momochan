@@ -79,7 +79,7 @@ module App
     result.gsub(/[“”「」『』【】"]/, '')
   end
 
-  def momochan_info(t0, t1, ready_p)
+  def momochan_info
     {
       size: Momochan.all.size,
       started_at: @t0,
