@@ -100,6 +100,7 @@ post '/lingr/' do
   json["events"].map {|e| e['message'] }.compact.map {|message|
     text = message['text']
     next momochan_info(t0, t1, ready_p) if /^#momochan info$/ =~ text
+    next $splitter.split('  ').inspect if /^#momochan debug$/ =~ text
     regexp = /#m[aiueo]*m[aiueo]*ch?[aiueo]*n|#amachan/
     mcs = text.scan(regexp).map {|_|
       momochan($markov, text.gsub(regexp, ''))
