@@ -82,8 +82,11 @@ post '/lingr/' do
   json = JSON.parse(request.body.string)
   json["events"].map {|e| e['message'] }.compact.map {|message|
     text = message['text']
-    if /#momochan$/ =~ text
+    case text
+    when /#momochang?\s*$/
       momochan
+    when /^#momonga$/
+      'はい'
     else
       Momochan.create({:text => text}).update
       $markov.study($splitter.split(text))
