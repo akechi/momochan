@@ -90,7 +90,7 @@ post '/lingr/' do
   json = JSON.parse(request.body.string)
   json["events"].map {|e| e['message'] }.compact.map {|message|
     text = message['text']
-    mcs = text.scan(/#momochang?/).map {|_|
+    mcs = text.scan(/#(momo|ama)chan/).map {|_|
       momochan($markov)
     }
     mgs = text.scan(/#momonga/).map {|_|
