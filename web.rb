@@ -84,15 +84,19 @@ post '/lingr/' do
   json = JSON.parse(request.body.string)
   json["events"].map {|e| e['message'] }.compact.map {|message|
     text = message['text']
-    case text
-    when /#momochang?\s*$/
+    mcs = text.scan(/#momochang?$/).map {|_|
       momochan
-    when /^#momonga$/
+    }
+    mgs = text.scan(/#momonga/).map {|_|
       [*["はい"]*10, "うるさい"].sample
-    else
+    }
+    reply = mcs.join("\n") + mgs.join("\n")
+    if reply.empty?
       Momochan.create({:text => text}).update
       $markov.study($splitter.split(text))
       ""
+    else
+      reply
     end
   }.join.rstrip[0..999]
 end
