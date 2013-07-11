@@ -61,6 +61,15 @@ class Markov
   end
 end
 
+def momochan(markov)
+  result = ''
+  11.times do
+    result = markov.build.join('')
+    break if result.size < 140 && result !~ /^https?:\/\/\S+$/
+  end
+  result.gsub(/[“”「」『』【】]/, '')
+end
+
 t0 = Time.now
 t1 = Time.now
 ready_p = false
@@ -77,21 +86,12 @@ Thread.start do
   t1 = Time.now
 end
 
-def momochan
-  result = ''
-  11.times do
-    result = $markov.build.join('')
-    break if result.size < 140 && result !~ /^https?:\/\/\S+$/
-  end
-  result.gsub(/[“”「」『』【】]/, '')
-end
-
 post '/lingr/' do
   json = JSON.parse(request.body.string)
   json["events"].map {|e| e['message'] }.compact.map {|message|
     text = message['text']
     mcs = text.scan(/#momochang?/).map {|_|
-      momochan
+      momochan($markov)
     }
     mgs = text.scan(/#momonga/).map {|_|
       [*["はい"]*10, "うるさい"].sample
@@ -108,7 +108,7 @@ post '/lingr/' do
 end
 
 get '/' do
-  momochan
+  momochan($markov)
 end
 
 get '/dev' do
