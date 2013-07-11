@@ -75,7 +75,7 @@ def momochan_info(t0, t1, ready_p)
 end
 
 t0 = Time.now
-t1 = Time.now
+t1 = t0
 ready_p = false
 
 $markov = Markov.new
