@@ -88,7 +88,7 @@ post '/lingr/' do
     when /#momochang?\s*$/
       momochan
     when /^#momonga$/
-      'はい'
+      (["はい"]*10+["うるさい"]).sample
     else
       Momochan.create({:text => text}).update
       $markov.study($splitter.split(text))
