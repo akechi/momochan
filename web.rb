@@ -62,13 +62,12 @@ class Markov
 end
 
 def momochan(markov, *args)
-  token =  args ? $splitter.split(args[0]) : nil
+  token =  args && args[0].size > 0 ? $splitter.split(args[0]) : nil
   markov.study(token) if token
   result = ''
   21.times do
     result = markov.build.join('')
     if token
-      p token[1...-1].select {|x| x.size >= 2 && result[x] }
       next if token[1...-1].select {|x| x.size >= 2 && result[x] }.size == 0
     end
     break if result.size < 140 && result !~ /^https?:\/\/\S+$/
