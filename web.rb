@@ -66,7 +66,7 @@ module App
   def momochan(markov, text)
     tokens = @splitter.split(text)
     markov.study(tokens)
-    result = 21.times.inject('') {|_, _|
+    text = 21.times.inject('') {|_, _|
       result = markov.build.join('')
       if words.select {|x| x.size >= 2 && result[x] }.empty?
         result
@@ -76,7 +76,7 @@ module App
         result
       end
     }
-    result.gsub(/[“”「」『』【】"]/, '')
+    text.gsub(/[“”「」『』【】"]/, '')
   end
 
   def momochan_info
