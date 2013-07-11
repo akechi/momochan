@@ -68,7 +68,7 @@ module App
     markov.study(tokens)
     text = 21.times.inject('') {|_, _|
       result = markov.build.join('')
-      if words.select {|x| x.size >= 2 && result[x] }.empty?
+      if tokens[1...-1].select {|x| x.size >= 2 && result[x] }.empty?
         result
       elsif result.size < 140 && /^https?:\/\/\S+$/ !~ result
         break result
