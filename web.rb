@@ -84,7 +84,8 @@ module App
       size: Momochan.all.size,
       started_at: @t0,
       boot_time: @t1 - @t0,
-      ready_p: @ready_p
+      ready_p: @ready_p,
+      x: (Momochan.methods.sort - methods).inspect
     }.to_json
   end
 
