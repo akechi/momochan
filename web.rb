@@ -67,7 +67,7 @@ def momochan(markov, text)
   result = ''
   21.times do
     result = markov.build.join('')
-    next if tokens[1...-1].select {|x| x.size >= 2 && result[x] }.size == 0
+    next if tokens[1...-1].select {|x| x.size >= 2 && result[x] }.empty?
     break if result.size < 140 && result !~ /^https?:\/\/\S+$/
   end
   result.gsub(/[“”「」『』【】]/, '')
