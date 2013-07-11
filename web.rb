@@ -62,8 +62,7 @@ class Markov
 end
 
 def momochan(markov, text)
-  token =  text.size > 0 ? $splitter.split(text) : nil
-  markov.study(token) if token
+  markov.study($splitter.split(text))
   result = ''
   21.times do
     result = markov.build.join('')
@@ -100,7 +99,6 @@ post '/lingr/' do
   json["events"].map {|e| e['message'] }.compact.map {|message|
     text = message['text']
     next momochan_info(t0, t1, ready_p) if /^#momochan info$/ =~ text
-    next $splitter.split('  ').inspect if /^#momochan debug$/ =~ text
     regexp = /#m[aiueo]*m[aiueo]*ch?[aiueo]*n|#amachan/
     mcs = text.scan(regexp).map {|_|
       momochan($markov, text.gsub(regexp, ''))
