@@ -80,11 +80,16 @@ module App
   end
 
   def momochan_info
+    t0 = Time.now
+    size = Momochan.all.size
+    t1 = Time.now
     {
-      size: Momochan.all.size,
+      size: size,
       started_at: @t0,
       boot_time: @t1 - @t0,
-      ready_p: @ready_p
+      ready_p: @ready_p,
+      time_size: t1 - t0,
+      tmptmp: $TMPTMP
     }.to_json
   end
 
@@ -96,7 +101,11 @@ module App
   $splitter = Splitter.new
 
   Thread.start do
-    Momochan.all.each do |m|
+    t0 = Time.now
+    x = Momochan.all
+    t1 = Time.now
+    $TMPTMP = t1 - t0
+    x.each do |m|
       #puts m['text']
       $markov.study($splitter.split(m['text']))
     end
