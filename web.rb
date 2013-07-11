@@ -61,55 +61,58 @@ class Markov
   end
 end
 
-def momochan(markov, text)
-  tokens = $splitter.split(text)
-  markov.study(tokens)
-  result = 21.times.inject('') {|_, _|
-    result = markov.build.join('')
-    if words.select {|x| x.size >= 2 && result[x] }.empty?
-      result
-    elsif result.size < 140 && /^https?:\/\/\S+$/ !~ result
-      break result
-    else
-      result
-    end
-  }
-  result.gsub(/[“”「」『』【】"]/, '')
-end
-
-def momochan_info(t0, t1, ready_p)
-  {
-    size: Momochan.all.size,
-    started_at: t0,
-    boot_time: t1 - t0,
-    ready_p: ready_p
-  }.to_json
-end
-
-t0 = Time.now
-t1 = t0
-ready_p = false
-
-$markov = Markov.new
-$splitter = Splitter.new
-
-Thread.start do
-  Momochan.all.each do |m|
-    #puts m['text']
-    $markov.study($splitter.split(m['text']))
+module App
+  module_function
+  def momochan(markov, text)
+    tokens = $splitter.split(text)
+    markov.study(tokens)
+    result = 21.times.inject('') {|_, _|
+      result = markov.build.join('')
+      if words.select {|x| x.size >= 2 && result[x] }.empty?
+        result
+      elsif result.size < 140 && /^https?:\/\/\S+$/ !~ result
+        break result
+      else
+        result
+      end
+    }
+    result.gsub(/[“”「」『』【】"]/, '')
   end
-  ready_p = true
-  t1 = Time.now
+
+  def momochan_info(t0, t1, ready_p)
+    {
+      size: Momochan.all.size,
+      started_at: @t0,
+      boot_time: @t1 - @t0,
+      ready_p: @ready_p
+    }.to_json
+  end
+
+  @t0 = Time.now
+  @t1 = t0
+  @ready_p = false
+
+  $markov = Markov.new
+  $splitter = Splitter.new
+
+  Thread.start do
+    Momochan.all.each do |m|
+      #puts m['text']
+      $markov.study($splitter.split(m['text']))
+    end
+    @ready_p = true
+    @t1 = Time.now
+  end
 end
 
 post '/lingr/' do
   json = JSON.parse(request.body.string)
   json["events"].map {|e| e['message'] }.compact.map {|message|
     text = message['text']
-    next momochan_info(t0, t1, ready_p) if /^#momochan info$/ =~ text
+    next App.momochan_info if /^#momochan info$/ =~ text
     regexp = /#m[aiueo]*m[aiueo]*ch?[aiueo]*n|#amachan/
     mcs = text.scan(regexp).map {|_|
-      momochan($markov, text.gsub(regexp, ''))
+      App.momochan($markov, text.gsub(regexp, ''))
     }
     mgs = text.scan(/#momonga/).map {|_|
       [*["はい"]*10, "うるさい"].sample
@@ -126,9 +129,9 @@ post '/lingr/' do
 end
 
 get '/' do
-  momochan($markov, '')
+  App.momochan($markov, '')
 end
 
 get '/dev' do
-  momochan_info(t0, t1, ready_p)
+  App.momochan_info
 end
