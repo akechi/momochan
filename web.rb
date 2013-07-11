@@ -96,7 +96,7 @@ post '/lingr/' do
     mgs = text.scan(/#momonga/).map {|_|
       [*["はい"]*10, "うるさい"].sample
     }
-    reply = mcs.join("\n") + mgs.join("\n")
+    reply = [mcs + mgs].join("\n")
     if reply.empty?
       Momochan.create({:text => text}).update
       $markov.study($splitter.split(text))
