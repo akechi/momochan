@@ -61,10 +61,16 @@ class Markov
   end
 end
 
-def momochan(markov)
+def momochan(markov, *args)
+  token =  args ? $splitter.split(args[0]) : nil
+  markov.study(token) if token
   result = ''
-  11.times do
+  21.times do
     result = markov.build.join('')
+    if token
+      p token[1...-1].select {|x| x.size >= 2 && result[x] }
+      next if token[1...-1].select {|x| x.size >= 2 && result[x] }.size == 0
+    end
     break if result.size < 140 && result !~ /^https?:\/\/\S+$/
   end
   result.gsub(/[“”「」『』【】]/, '')
@@ -83,7 +89,7 @@ $splitter = Splitter.new
 
 Thread.start do
   Momochan.all.each do |m|
-    puts m['text']
+    #puts m['text']
     $markov.study($splitter.split(m['text']))
   end
   ready_p = true
@@ -96,7 +102,7 @@ post '/lingr/' do
     text = message['text']
     next momochan_info(t0, t1, ready_p) if /^#momochan info$/ =~ text
     mcs = text.scan(/#m[aiueo]*m[aiueo]*ch?[aiueo]*n|#amachan/).map {|_|
-      momochan($markov)
+      momochan($markov, text.gsub(/#(momo|ama)chan/, ''))
     }
     mgs = text.scan(/#momonga/).map {|_|
       [*["はい"]*10, "うるさい"].sample
