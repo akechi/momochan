@@ -78,7 +78,12 @@ def momochan(markov, text)
 end
 
 def momochan_info(t0, t1, ready_p)
-  {size: Momochan.all.size, started_at: t0, boot_time: t1 - t0, ready_p: ready_p}.to_json
+  {
+    size: Momochan.all.size,
+    started_at: t0,
+    boot_time: t1 - t0,
+    ready_p: ready_p
+  }.to_json
 end
 
 t0 = Time.now
