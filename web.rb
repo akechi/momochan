@@ -64,11 +64,11 @@ end
 def momochan(markov, text)
   tokens = $splitter.split(text)
   markov.study(tokens)
-  result = momochan_construct(tokens, 21, '')
+  result = momochan_construct(markov, tokens, 21, '')
   result.gsub(/[“”「」『』【】]/, '')
 end
 
-def momochan_construct(tokens, retry_countdown, previous)
+def momochan_construct(markov, tokens, retry_countdown, previous)
   return previous if retry_countdown <= 0
   result = markov.build.join('')
   if tokens[1...-1].select {|x| x.size >= 2 && result[x] }.empty?
